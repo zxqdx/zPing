@@ -34,6 +34,17 @@ module.exports.connections = {
 
   /***************************************************************************
   *                                                                          *
+  * Memory storage for DEVELOPMENT ONLY                                      *
+  *                                                                          *
+  * Installed by zxqdx.                                                      *
+  *                                                                          *
+  ***************************************************************************/
+  memory: {
+    adapter: 'sails-memory'
+  },
+
+  /***************************************************************************
+  *                                                                          *
   * MySQL is the world's most popular relational database.                   *
   * http://en.wikipedia.org/wiki/MySQL                                       *
   *                                                                          *
