@@ -1,0 +1,14 @@
+/*
+---------- index
+overall: website ipvx rate
+graph: total(per 5 secs) eachPing
+current: ping avg5
+avg: hour day
+total: avgPing lossRate
+	   highest lowest
+       lagLength(>500ms) timeLength
+---------- overall
+ping range pie chart(by day)
+recent 27 hourly ping
+bar chart(by day)
+*/

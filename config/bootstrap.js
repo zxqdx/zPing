@@ -10,8 +10,38 @@
  */
 
 module.exports.bootstrap = function(cb) {
+    SocketManager._ = new SocketManager();
+    var createPing = function(w, p, t) {
+        Ping.create({
+            w: w,
+            p: p,
+            t: t
+        }, function(err, created) {
+            if (err) {
+                return sails.log.error(err)
+            };
+            sails.log(JSON.stringify(created));
+            // sails.sockets.emit('ping', {p: p});
+            sails.sockets.emit(SocketManager._.listIds(), 'ping', {
+                p: p,
+                id: created.id
+            });
+        });
+    };
 
-  // It's very important to trigger this callback method when you are finished
-  // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
-  cb();
+    var testPs = new PingService({
+        on: {
+            data: createPing,
+            error: function(err) {
+                sails.log.error(err);
+            },
+            save: function(params) {
+                return;
+            }
+        }
+    });
+
+    // It's very important to trigger this callback method when you are finished
+    // with the bootstrap!  (otherwise your server will never lift, since it's waiting on the bootstrap)
+    cb();
 };

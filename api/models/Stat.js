@@ -24,11 +24,23 @@ module.exports = {
             unique: true
         },
         a: { // average ping in ms
-            type: 'number',
+            type: 'integer',
+            defaultsTo: 0
+        },
+        l: { // loss pings
+            type: 'integer',
             defaultsTo: 0
         },
         t: { // total pings
-            type: 'number',
+            type: 'integer',
+            defaultsTo: 0
+        },
+        max: { // maximum ping
+            type: 'integer',
+            defaultsTo: 0
+        },
+        min: { // minimum ping
+            type: 'integer',
             defaultsTo: 0
         }
     }

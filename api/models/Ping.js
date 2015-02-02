@@ -19,12 +19,12 @@ module.exports = {
             required: true
         },
         p: { // ping
-            type: 'number',
+            type: 'integer',
             required: true
         },
         t: { // type
-            type: 'number',
-            enum: [4, 6] // ipv4 or ipv6
+            type: 'integer',
+            enum: [4, 6], // ipv4 or ipv6
             required: true
         }
     }

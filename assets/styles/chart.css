@@ -1,0 +1,15 @@
+.legend {
+	list-style: none;
+	padding: 5px;
+	width: 200px;
+	position: absolute;
+	left: 40px;
+}
+.legend li span {
+	width: 20px;
+	height: 20px;
+	display: inline-block;
+	position: relative;
+	top: 5px;
+	margin-right: 5px;
+}
