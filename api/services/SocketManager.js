@@ -1,3 +1,10 @@
+/**
+ * Socket wrapper for sails.sockets
+ *
+ * Several types of ping events:
+ *   - pingUnit: ping data based on each unit
+ *   - pingInt: ping data based on each interval
+ */
 module.exports = function() {
     var socketIds = {};
     sails.io.on('connection', function(socket) {
@@ -19,4 +26,8 @@ module.exports = function() {
         }
         return tempList;
     };
+
+    this.emit = function(event, data) {
+        sails.sockets.emit(_this.listIds(), event, data);
+    }
 }

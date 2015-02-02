@@ -13,7 +13,6 @@ module.exports = {
    * `RenderController.homepage()`
    */
   homepage: function (req, res) {
-  	
     return res.view('homepage');
   }
 };

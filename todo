@@ -1,12 +1,14 @@
 /*
 ---------- index
-overall: website ipvx rate
-graph: total(per 5 secs) eachPing
-current: ping avg5
+website: name ipvx   |  [Placeholder]
+
+overall: rate        |               graph
+current: ping avgx   |   total(per x secs) | eachPing
 avg: hour day
-total: avgPing lossRate
-	   highest lowest
-       lagLength(>500ms) timeLength
+     llh  llh  #lossRate lowest highest
+
+total: llh lagLength(>500ms) timeLength
+
 ---------- overall
 ping range pie chart(by day)
 recent 27 hourly ping
