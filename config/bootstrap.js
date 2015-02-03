@@ -12,6 +12,7 @@
 module.exports.bootstrap = function(cb) {
     SocketManager._ = new SocketManager();
 
+    var overallStat = {};
     var intStat = {};
     var intStatReset = function(hash) {
         ['l', 'h', 'total', 'count'].map(function(x) {
@@ -54,7 +55,7 @@ module.exports.bootstrap = function(cb) {
             });
         });
     };
-    setInterval(function() {
+    setInterval(function() { // interval update
         for (var hash in intStat) {
             var id = intStat[hash].id;
             var w = intStat[hash].w;
@@ -79,6 +80,8 @@ module.exports.bootstrap = function(cb) {
     }, 5000);
 
     var testPs = new PingService({
+        maxBuffer: 0.3,
+        website: 'www.acfun.tv',
         on: {
             data: createPing,
             error: function(err) {

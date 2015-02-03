@@ -2,15 +2,22 @@
 ---------- index
 website: name ipvx   |  [Placeholder]
 
-overall: rate        |               graph
-current: ping avgx   |   total(per x secs) | eachPing
-avg: hour day
-     llh  llh  #lossRate lowest highest
+overall: rates    |               graph
+current: ping     |   total(per x secs) | eachPing
+avg: hour  day (ping inc/dec rate, e.g. 2% ↑)
+    clalh clalh
+#clalh = count losses avg lowest highest
+#rates = in newest 1000 pings, lagPerc & lossRate per 10 pings
 
-total: llh lagLength(>500ms) timeLength
+total: clalh lagLength(>500ms) timeLength
 
 ---------- overall
 ping range pie chart(by day)
 recent 27 hourly ping
 bar chart(by day)
 */
+
+i18n http://git.ayaya.moe/trend/trendrobot/tree/master/config/locales
+user-select:none
+
+color: 97BBCD

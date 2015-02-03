@@ -4,6 +4,8 @@
 	width: 200px;
 	position: absolute;
 	left: 40px;
+	font-size: 12px;
+	text-shadow: 0 0 1px #FFFFFF;
 }
 .legend li span {
 	width: 20px;

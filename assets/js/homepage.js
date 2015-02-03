@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    var URL = 'www.acfun.tv#ipv4';
+    $('#url').html(URL);
+
     Chart.defaults.global.responsive = true // DEBUG
     Chart.defaults.global.scaleBeginAtZero = true;
     //=============================================================
@@ -24,7 +27,7 @@ $(document).ready(function() {
     var eachPingCht = new Chart(eachPingCtx).Line(eachPingDat, eachPingOpt);
     var eachPingleg = eachPingCht.generateLegend();
     $('#eachPingChart').prepend(eachPingleg);
-    //=============================================================
+    //-------------------------------------------------------------
     var intPingCnt = -3;
     var intPingCtx = $('#intPing').get(0).getContext("2d");
     var intPingDat = {
@@ -65,12 +68,46 @@ $(document).ready(function() {
     var intPingCht = new Chart(intPingCtx).Line(intPingDat, intPingOpt);
     var intPingleg = intPingCht.generateLegend();
     $('#intPingChart').prepend(intPingleg);
+    //-------------------------------------------------------------
+    var lagRateCtx = $('#lagRate canvas').get(0).getContext("2d");
+    var lagRateDat = [{
+        value: 20,
+        color: "#FFAB95", //DE7A60
+        highlight: "#FFAB95",
+        label: "Red"
+    }, {
+        value: 80,
+        color: "#6EBC90", //449E6B
+        highlight: "#6EBC90",
+        label: "Green"
+    }];
+    var lagRateOpt = {
+        percentageInnerCutout: 72
+    }
+    var lagRateCht = new Chart(lagRateCtx).Doughnut(lagRateDat, lagRateOpt);
+    //-------------------------------------------------------------
+    var lossRateCtx = $('#lossRate canvas').get(0).getContext("2d");
+    var lossRateDat = [{
+        value: 40,
+        color: "#FFAB95", //DE7A60
+        highlight: "#FFAB95",
+        label: "Red"
+    }, {
+        value: 60,
+        color: "#6EBC90", //449E6B
+        highlight: "#6EBC90",
+        label: "Green"
+    }];
+    var lossRateOpt = {
+        percentageInnerCutout: 72
+    }
+    var lossRateCht = new Chart(lossRateCtx).Doughnut(lossRateDat, lossRateOpt);
     //=============================================================
     io.socket.on('pingUnit', function(msg) {
         eachPingCht.addData([msg.p], msg.id);
         eachPingCnt++;
         if (eachPingCnt <= 0) {
-            if (eachPingCnt == 0) { 
+            if (eachPingCnt == 0) {
                 eachPingCht.removeData();
                 eachPingCht.removeData();
             };
@@ -82,7 +119,7 @@ $(document).ready(function() {
         intPingCht.addData([msg.avg, msg.h, msg.l], msg.id);
         intPingCnt++;
         if (intPingCnt <= 0) {
-            if (intPingCnt == 0) { 
+            if (intPingCnt == 0) {
                 intPingCht.removeData();
                 intPingCht.removeData();
             };

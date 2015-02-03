@@ -1,16 +1,70 @@
 <style type="text/css">
-
+body {
+    font-family: 'Microsoft Yahei', '微软雅黑';
+    padding: 10px;
+}
 #mainer {
+    margin: 20px 0;
     display: flex;
     align-content: stretch;
-    /*height: 400px;*/
 }
-#mainer div {
+#url, #desc {
+    float: left;
+    font-size: 20px;
+}
+#url {
+    font-weight: bold;
+}
+#ann {
+    float: right;
+    text-align: right;
+    font-size: 12px;
+    color: #ccc;
+}
+#mainer>div {
     position: relative;
     flex-basis: 0;
 }
+.number, .percent, .desc {
+    text-align: center;
+}
+.number {
+    font-size: 50px;
+    color: #DE7A60;
+    font-weight: bold;
+}
+.percent {
+    font-size: 20px;
+    color: #DE7A60;
+}
+.desc {
+    color: #E36848;
+    font-size: 14px;
+}
 #overallStat {
-    flex-grow: 2;
+    min-width: 320px;
+}
+.rate {
+    float: left;
+    width: 150px;
+    height: 150px;
+    margin-right: 5px;
+}
+.rate .number, .rate .desc {
+    position: absolute;
+}
+.rate .number {
+    width: 150px;
+    height: 150px;
+    line-height: 150px;
+    letter-spacing: -2px;
+}
+.rate .desc {
+    width: 150px;
+    top: 95px;
+}
+.rate canvas {
+    height: 150px;
 }
 #eachPingChart {
     flex-grow: 4;
@@ -18,15 +72,37 @@
 #intPingChart {
     flex-grow: 5;
 }
+#eachPingChart canvas, #intPingChart canvas {
+    height: 450px;
+}
+.clearfix {
+    clear: both;
+}
 canvas {
     width: 100%;
-    height: 500px;
 }
 </style>
-
+<div id="header">
+    <div id="url"></div>
+    <div id="desc">响应时间及丢失数据包率监测（单位：毫秒）</div>
+    <div id="ann">
+        这是当年AcFun趋势里的一个模块，我拿出来彻底重写了下——zxqdx<br>
+        参与趋势娘项目欢迎加群424671026并请注明来意
+    </div>
+    <div class="clearfix"></div>
+</div>
 <div id="mainer">
     <div id="overallStat">
-        
+        <div id="lagRate" class="rate">
+            <div class="number">20<span class="percent">%</span></div>
+            <div class="desc">波动占比</div>
+            <canvas></canvas>
+        </div>
+        <div id="lossRate" class="rate">
+            <div class="number">40<span class="percent">%</span></div>
+            <div class="desc">丢包率</div>
+            <canvas></canvas>
+        </div>
     </div>
     <div id="eachPingChart">
         <canvas id="eachPing"></canvas>
