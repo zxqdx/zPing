@@ -36,7 +36,7 @@ $(document).ready(function() {
             tmpDat = {
                 labels: tmpStat ? tmpStat[0][0] : ["", ""],
                 datasets: [{
-                    label: "Current",
+                    label: "当前",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -50,7 +50,7 @@ $(document).ready(function() {
             tmpDat = {
                 labels: tmpStat ? tmpStat[0][0] : ["", ""],
                 datasets: [{
-                    label: "Average",
+                    label: "平均",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -59,7 +59,7 @@ $(document).ready(function() {
                     pointHighlightStroke: "rgba(151,187,205,1)",
                     data: tmpStat ? tmpStat[1][0] : [0, 0]
                 }, {
-                    label: "Highest",
+                    label: "最高",
                     fillColor: "rgba(199,221,232,0.2)",
                     strokeColor: "rgba(199,221,232,1)",
                     pointColor: "rgba(199,221,232,1)",
@@ -68,7 +68,7 @@ $(document).ready(function() {
                     pointHighlightStroke: "rgba(151,187,205,1)",
                     data: tmpStat ? tmpStat[1][1] : [0, 0]
                 }, {
-                    label: "Lowest",
+                    label: "最低",
                     fillColor: "rgba(65,116,140,0.2)",
                     strokeColor: "rgba(65,116,140,1)",
                     pointColor: "rgba(65,116,140,1)",

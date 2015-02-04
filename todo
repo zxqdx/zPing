@@ -16,11 +16,14 @@ total: clalh lagLength(>500ms) timeLength
 ping range pie chart(by day)
 recent 27 hourly ping
 bar chart(by day)
+
+---------- color: 97BBCD
 */
+ws.get
+hourly stat
+user-select:none
+linux support
 
 i18n http://git.ayaya.moe/trend/trendrobot/tree/master/config/locales
-user-select:none
-
-color: 97BBCD
 
 databse ----fallback----> memory
