@@ -12,6 +12,10 @@
 module.exports.bootstrap = function(cb) {
     SocketManager._ = new SocketManager();
 
+    var LAG_MS = 200; // Pings above are treated as lag
+    var OVERALL_RANGE = 1000; // Newest OVERALL_RANGE pings are in overall stats.
+    var OVERALL_INTERVAL = 20; // Calculate overall stats in given interval (ms).
+
     var overallStat = {};
     var intStat = {};
     var intStatReset = function(hash) {
@@ -47,6 +51,38 @@ module.exports.bootstrap = function(cb) {
                 intStat[hash].h = p;
             };
 
+            if (created.id % OVERALL_INTERVAL == 0) {
+                // TODO: in newest 1000 pings, lagPerc & lossRate per 20 pings
+                Ping.find({
+                    id: {
+                        '>': created.id - OVERALL_RANGE
+                    },
+                    sort: 'id'
+                }, function(err, pings) {
+                    var lossCount = 0;
+                    var lagSec = 0;
+                    var totalSec = (pings[pings.length - 1].d.getTime() -
+                                    pings[0].d.getTime()) / 1000;
+                    var totalPing = 0;
+                    for (var i = 0; i < pings.length; i++) {
+                        if (pings[i].p == 0) {
+                            lossCount++;
+                        } else {
+                            totalPing += pings[i].p;
+                        }
+                        if ((pings[i].p > LAG_MS || pings[i].p == 0) && i > 0) {
+                            lagSec += (pings[i].d.getTime() - pings[i - 1].d.getTime()) / 1000;
+                        };
+                    };
+                    SocketManager._.emit('rate', {
+                        lagRate: parseInt(lagSec / totalSec * 100),
+                        lossRate: parseInt(lossCount / pings.length * 100),
+                        avgPing: pings.length == lossCount
+                                 ? 0 : parseInt(totalPing / (pings.length - lossCount))
+                    });
+                })
+            };
+
             SocketManager._.emit('pingUnit', {
                 w: w,
                 p: p,
@@ -80,7 +116,6 @@ module.exports.bootstrap = function(cb) {
     }, 5000);
 
     var testPs = new PingService({
-        maxBuffer: 0.3,
         website: 'www.acfun.tv',
         on: {
             data: createPing,

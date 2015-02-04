@@ -1,29 +1,55 @@
 <style type="text/css">
 body {
+    padding: 0;
+    margin: 0;
     font-family: 'Microsoft Yahei', '微软雅黑';
+    background-color: #D3D0C6;
+}
+#header, #mainer, #utility, #footer {
     padding: 10px;
 }
-#mainer {
-    margin: 20px 0;
-    display: flex;
-    align-content: stretch;
+#mainer, #utility {
+    background-color: white;
+}
+#header {
+    min-height: 30px;
 }
 #url, #desc {
     float: left;
     font-size: 20px;
-}
-#url {
-    font-weight: bold;
+    color: #564A29;
 }
 #ann {
     float: right;
     text-align: right;
     font-size: 12px;
-    color: #ccc;
+    color: #A0977D;
+}
+#url {
+    font-weight: bold;
+}
+#mainer {
+    padding: 30px 10px;
+    display: flex;
+    align-content: stretch;
+    overflow: hidden;
 }
 #mainer>div {
     position: relative;
     flex-basis: 0;
+}
+#mainerStat {
+    margin-right: 10px;
+    min-width: 310px;
+}
+#basicStat>div {
+    width: 50%;
+}
+#currPing {
+    float: left;
+}
+#currPingAvg {
+    float: right;
 }
 .number, .percent, .desc {
     text-align: center;
@@ -38,11 +64,13 @@ body {
     color: #DE7A60;
 }
 .desc {
-    color: #E36848;
     font-size: 14px;
+    color: rgba(227, 104, 72, 0.8);
 }
 #overallStat {
-    min-width: 320px;
+    top: 100px;
+    margin: 10px 0;
+    overflow: hidden;
 }
 .rate {
     float: left;
@@ -61,10 +89,37 @@ body {
 }
 .rate .desc {
     width: 150px;
-    top: 95px;
+    top: 170px;
 }
 .rate canvas {
     height: 150px;
+}
+#hourlyStat {
+    border: 1px #4E5457 solid;
+}
+#hourlyStat .number {
+    position: relative; 
+    top: 5px; 
+    font-weight: normal;
+    letter-spacing: -4px;
+    font-size: 45px;
+    line-height: 50px;
+}
+#hourlyStat .block {
+    display: flex;
+}
+#hourlyStat .blockUnit {
+    flex-grow: 1;
+    height: 85px;
+    margin-bottom: -5px;
+}
+#hourlyStat .title {
+    background-color: #4E5457;
+    color: #D2D7D9;
+    height: 30px;
+    font-size: 20px;
+    line-height: 30px;
+    text-align: center;
 }
 #eachPingChart {
     flex-grow: 4;
@@ -75,16 +130,32 @@ body {
 #eachPingChart canvas, #intPingChart canvas {
     height: 450px;
 }
-.clearfix {
-    clear: both;
+#utility {
+    overflow: hidden;
+}
+#utility div {
+    border: 5px dashed #eee;
+    text-align: center;
+    color: #666;
+    height: 350px;
+    line-height: 350px;
+}
+#footer {
+    height: 30px;
+    font-size: 12px;
+    color: #564A29;
+    text-align: center;
 }
 canvas {
     width: 100%;
 }
+.clearfix {
+    clear: both;
+}
 </style>
 <div id="header">
     <div id="url"></div>
-    <div id="desc">响应时间及丢失数据包率监测（单位：毫秒）</div>
+    <div id="desc">响应时间及丢包率监测（单位：毫秒）</div>
     <div id="ann">
         这是当年AcFun趋势里的一个模块，我拿出来彻底重写了下——zxqdx<br>
         参与趋势娘项目欢迎加群424671026并请注明来意
@@ -92,16 +163,58 @@ canvas {
     <div class="clearfix"></div>
 </div>
 <div id="mainer">
-    <div id="overallStat">
-        <div id="lagRate" class="rate">
-            <div class="number">20<span class="percent">%</span></div>
-            <div class="desc">波动占比</div>
-            <canvas></canvas>
+    <div id="mainerStat">
+        <div id="basicStat">
+            <div id="currPing">
+                <span class="desc">当前</span>
+                <span class="number">----</span>
+            </div>
+            <div id="currPingAvg">
+                <span class="desc">平均</span>
+                <span class="number">----</span>
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <div id="lossRate" class="rate">
-            <div class="number">40<span class="percent">%</span></div>
-            <div class="desc">丢包率</div>
-            <canvas></canvas>
+        <div id="overallStat">
+            <div id="lagRate" class="rate">
+                <div class="number">0<span class="percent">%</span></div>
+                <div class="desc">高延时占比</div>
+                <canvas></canvas>
+            </div>
+            <div id="lossRate" class="rate">
+                <div class="number">0<span class="percent">%</span></div>
+                <div class="desc">丢包率</div>
+                <canvas></canvas>
+            </div>
+        </div>
+        <div id="hourlyStat">
+            <div class="title">
+                每小时数据<span class="tag up">2% ↑</span>
+            </div>
+            <div class="block top">
+                <div class="blockUnit" id="hourlyCount">
+                    <div class="number">8888</div>
+                    <div class="desc">请求数</div>
+                </div>
+                <div class="blockUnit" id="hourlyLoss">
+                    <div class="number">6666</div>
+                    <div class="desc">丢包数</div>
+                </div>
+            </div>
+            <div class="block bottom">
+                <div class="blockUnit" id="hourlyLow">
+                    <div class="number">2333</div>
+                    <div class="desc">最低</div>
+                </div>
+                <div class="blockUnit" id="hourlyAvg">
+                    <div class="number">6666</div>
+                    <div class="desc">平均</div>
+                </div>
+                <div class="blockUnit" id="hourlyHigh">
+                    <div class="number">8888</div>
+                    <div class="desc">最高</div>
+                </div>
+            </div>
         </div>
     </div>
     <div id="eachPingChart">
@@ -111,4 +224,10 @@ canvas {
         <canvas id="intPing"></canvas>
     </div>
 </div>
-
+<div id="utility">
+    <div>敬请期待</div>
+</div>
+<div id="footer">
+    AcFun Trend Ver 4 by zxqdx, 2011~2015.<br>
+    AcFun Ping Module Ver 2.1.0 by zxqdx, 2012~2015.
+</div>

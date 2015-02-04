@@ -4,8 +4,6 @@
  * Available options:
  *   - website: {string} url of the website
  *   - interval: {number} interval of main graph
- *   - folder: {string} path to the folder that stores the history result
- *                      if folder is not given or invalid, data won't be stored
  *   - ver: {number} 4(ipv4) or 6(ipv6)
  *   - maxBuffer: {number} max buffer size in KB
  *   - on: { {object} subscriptions
@@ -35,7 +33,6 @@ module.exports = function PingService(options) {
     };
     optOrDefault('website', 'www.google.com');
     optOrDefault('interval', 5);
-    optOrDefault('folder', '');
     optOrDefault('maxBuffer', 300);
     optOrDefault('ver', 4);
     optOrDefault('on', {});
@@ -78,7 +75,6 @@ module.exports = function PingService(options) {
             });
         child.stdout.on('data', function(data) {
             if (childKilled) {return;};
-            sails.log(child.stdout.bytesRead);
             if (child.stdout.bytesRead > options.maxBuffer * 1024) {
                 // Buffer will exceed
                 sails.log("KILLING"+child.pid);
@@ -102,11 +98,14 @@ module.exports = function PingService(options) {
                         continue;
                     }
                     if (platformId == 0) { // Windows
-                        if (temp.toLowerCase() === 'request timed out.') {
+                        if (temp.toLowerCase() === 'request timed out.'
+                         || temp.toLowerCase().indexOf('unreachable') > -1
+                         || temp.toLowerCase().indexOf('fail') > -1) {
                             ping = 0;
                         } else {
                             var match = /time=(\d+)ms/i.exec(temp);
                             if (match == null) {
+                                sails.log(temp);
                                 continue
                             };
                             ping = parseInt(match[1], 10);
@@ -126,9 +125,6 @@ module.exports = function PingService(options) {
      * Saves data that 'save' event returns.
      */
     this.save = function() {
-        if (!options.folder) {
-            return;
-        };
         // TODO
     };
     /**

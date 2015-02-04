@@ -2,14 +2,15 @@
 ---------- index
 website: name ipvx   |  [Placeholder]
 
+#clalh = count loss <br> avg lowest highest
+#rates = in newest 1000 pings, lagPerc & lossRate per 20 pings
 overall: rates    |               graph
-current: ping     |   total(per x secs) | eachPing
-avg: hour  day (ping inc/dec rate, e.g. 2% ↑)
-    clalh clalh
-#clalh = count losses avg lowest highest
-#rates = in newest 1000 pings, lagPerc & lossRate per 10 pings
+basic: curr avg   |   total(per x secs) | eachPing
+avg: hour.clalh (ping inc/dec rate, e.g. 2% ↑)
 
+navblocks
 total: clalh lagLength(>500ms) timeLength
+
 
 ---------- overall
 ping range pie chart(by day)
@@ -21,3 +22,5 @@ i18n http://git.ayaya.moe/trend/trendrobot/tree/master/config/locales
 user-select:none
 
 color: 97BBCD
+
+databse ----fallback----> memory
