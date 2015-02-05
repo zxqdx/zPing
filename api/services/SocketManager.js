@@ -22,6 +22,9 @@ module.exports = function() {
                 _this.emit('getEach', pings);
             });
         });
+        socket.on('getHourly', function() {
+            _this.emit('getHourly', on.getHourly());
+        });
         socket.on('disconnect', function() {
             delete socketIds[socket.id];
         });

@@ -49,9 +49,9 @@ $(document).ready(function() {
                 labels: tmpStat ? tmpStat[0][0] : ["", ""],
                 datasets: [{
                     label: __.t('Average'),
-                    fillColor: "rgba(151,187,205,0.2)",
-                    strokeColor: "rgba(151,187,205,1)",
-                    pointColor: "rgba(151,187,205,1)",
+                    fillColor: "rgba(65,116,140,0.2)",
+                    strokeColor: "rgba(65,116,140,1)",
+                    pointColor: "rgba(65,116,140,1)",
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(151,187,205,1)",
@@ -67,9 +67,9 @@ $(document).ready(function() {
                     data: tmpStat ? tmpStat[1][1] : [0, 0]
                 }, {
                     label: __.t('Lowest'),
-                    fillColor: "rgba(65,116,140,0.2)",
-                    strokeColor: "rgba(65,116,140,1)",
-                    pointColor: "rgba(65,116,140,1)",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
                     pointStrokeColor: "#fff",
                     pointHighlightFill: "#fff",
                     pointHighlightStroke: "rgba(151,187,205,1)",
@@ -170,6 +170,37 @@ $(document).ready(function() {
                 } else {
                     $('#currPing .number').html(msg.p);
                 };
+            });
+        });
+        var hourlyStat = {};
+        var renderHourlyStat = function() {
+            console.log(hourlyStat);
+            $('#hourlyCount .number').html(hourlyStat.c == 0 ? '----' : hourlyStat.c);
+            $('#hourlyLoss .number').html((hourlyStat.loss == 0 && hourlyStat.c == 0) ? '----' : hourlyStat.loss);
+            $('#hourlyLow .number').html(hourlyStat.l == 0 ? '----' : hourlyStat.l);
+            $('#hourlyAvg .number').html(hourlyStat.avg == 0 ? '----' : hourlyStat.avg);
+            $('#hourlyHigh .number').html(hourlyStat.h == 0 ? '----' : hourlyStat.h);
+            var currInc = hourlyStat.inc;
+            var incHtml = '';
+            $('#hourlyStat .tag').removeClass('up down');
+            if (hourlyStat.c == 0 && hourlyStat.inc == 0) {
+                incHtml = '--% -';
+                $('#hourlyStat .tag').addClass('up');
+            } else if (hourlyStat.inc >= 0) {
+                $('#hourlyStat .tag').html(hourlyStat.inc + '% ' + '↑');
+                $('#hourlyStat .tag').addClass('up');
+            } else {
+                $('#hourlyStat .tag').html(hourlyStat.inc + '% ' + '↓');
+                $('#hourlyStat .tag').addClass('down');
+            };
+        };
+        io.socket.emit('getHourly');
+        io.socket.on('getHourly', function(msg) {
+            hourlyStat = msg;
+            renderHourlyStat();
+            io.socket.on('pingHourly', function(msg) {
+                hourlyStat = msg;
+                renderHourlyStat();
             });
         });
     });
