@@ -9,7 +9,6 @@
  *   - on: { {object} subscriptions
  *     data: {function(ping)} when ping is received
  *     error: {function(err)} when error occurs
- *     save: {function(params)} returns the data needed to save
  *   }
  *
  * Supported platforms:
@@ -38,9 +37,8 @@ module.exports = function PingService(options) {
     optOrDefault('ver', 4);
     optOrDefault('on', {});
     if ((!options.on.hasOwnProperty('data')) ||
-        (!options.on.hasOwnProperty('error')) ||
-        (!options.on.hasOwnProperty('save'))) {
-        throw new Error('Please bind data, error and save events.');
+        (!options.on.hasOwnProperty('error'))) {
+        throw new Error('Please bind data and error events.');
     }
     // Get platform information
     var platform = os.platform();
@@ -59,7 +57,6 @@ module.exports = function PingService(options) {
     } else if (platformId == 1) { // Linux
         pingCmd += path.join(__dirname, '../..', 'ping' + options.ver + '.sh')
                 + ' ' + options.website;
-        sails.log('cmd: '+pingCmd);
     }
     // Set up pings
     var dataBuff = '';
@@ -78,7 +75,7 @@ module.exports = function PingService(options) {
                     options.on.error(err.name + ': ' + err.message);
                     return;
                 };
-                console.log('Finished.');
+                sails.log('Finished.');
             });
         child.stdout.on('data', function(data) {
             if (childKilled) {return;};
@@ -139,16 +136,10 @@ module.exports = function PingService(options) {
 
     // Methods
     /**
-     * Saves data that 'save' event returns.
-     */
-    this.save = function() {
-        // TODO
-    };
-    /**
-     * Saves and stops the current ping.
+     * Stops the current ping.
      */
     this.stop = function() {
-        this.save();
+        
         // TODO
     }
 }

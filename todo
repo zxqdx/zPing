@@ -3,13 +3,13 @@
 website: name ipvx   |  [Placeholder]
 
 #clalh = count loss <br> avg lowest highest
-#rates = in newest 1000 pings, lagPerc & lossRate per 20 pings
+#rates = in newest 100 pings, lagPerc & lossRate per 20 pings
 overall: rates    |               graph
 basic: curr avg   |   total(per x secs) | eachPing
 avg: hour.clalh (ping inc/dec rate, e.g. 2% ↑)
 
 navblocks
-total: clalh lagLength(>500ms) timeLength
+    total: clalh lagLength(>500ms) timeLength
 
 
 ---------- overall
@@ -19,9 +19,7 @@ bar chart(by day)
 
 ---------- color: 97BBCD
 */
-cnzz
+navblocks
 
-hourly stat
-website name uniform
+cnzz
 databse ----fallback----> memory
-single website support

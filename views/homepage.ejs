@@ -171,15 +171,34 @@ a {
     height: 450px;
 }
 #utility {
+    min-height: 350px;
+    line-height: 350px;
     overflow: hidden;
 }
-#utility div {
-    border: 5px dashed #eee;
-    text-align: center;
-    color: #666;
-    height: 350px;
-    line-height: 350px;
+#utility .nav {
+    float: left;
+    width: 150px;
+    height: 150px;
+    margin-right: 20px;
+    margin-bottom: 20px;
+    border: 1px white solid;
 }
+#utility .nav.c1 {
+    border-color: #CCF7DF;
+    -webkit-transition: border 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: border 0.1s linear, box-shadow 0.1s linear;
+            transition: border 0.1s linear, box-shadow 0.1s linear;
+}
+#utility .nav.c1.active {
+    border-color: #84DBAA;
+    -webkit-box-shadow: 0 0 5px #84DBAA;
+       -moz-box-shadow: 0 0 5px #84DBAA;
+            box-shadow: 0 0 5px #84DBAA;
+}
+#utility .nav.long {
+    width: 320px; /* nav.width * 2 + nav.margin-right */
+}
+
 #footer {
     height: 30px;
     font-size: 12px;
@@ -204,9 +223,6 @@ canvas {
     }
     #eachPingChart canvas, #intPingChart canvas {
         height: 225px;
-    }
-    .rate {
-        /*margin-right: 0; */
     }
 }
 /* Mobile Screen */
@@ -311,7 +327,9 @@ __._('Lowest', '<%= __('Lowest') %>');
     </div>
 </div>
 <div id="utility">
-    <div><%= __('Coming Soon') %></div>
+    <!--<div><%= __('Coming Soon') %></div>-->
+    <div class="nav c1 active"></div>
+    <div class="clearfix"></div>
 </div>
 <div id="footer">
     AcFun Trend Ver 4 by zxqdx, 2011~2015.<br>

@@ -15,21 +15,23 @@ module.exports.bootstrap = function(cb) {
     var WEBSITE = 'www.acfun.tv';
     var IPVX = 4;
     var LAG_MS = 200; // Pings above are treated as lag
-    var RATE_RANGE = 1000; // Newest RATE_RANGE pings are in rate stats
+    var RATE_RANGE = 100; // Newest RATE_RANGE pings are in rate stats
     var RATE_INTERVAL = 20; // Calculate overall stats in given interval (ms)
     var MAX_EACH_HISTORY = 5; // maximum number of storing eachPing history events
     var MAX_INT_HISTORY = 5; // maximum number of storing intPing history events
     var INT_INTERVAL = 5000; // Calculate interval stats in given interval (ms)
     var HOURLY_INTERVAL = 3600 * 1000; // Calculate hourly stats in given interval (ms)
 
-    var overallStat = {};
-    var intStat = {};
-    var intStatHistory = {};
-    var intStatReset = function(hash) {
+    var intStat = {
+        id: 0
+    };
+    var intStatHistory = [];
+    var intStatReset = function() {
         ['l', 'h', 'total', 'count'].map(function(x) {
-            intStat[hash][x] = 0;
+            intStat[x] = 0;
         });
     };
+    intStatReset();
     var hourlyStatHistory = {
         avg: 0,
         l: 0,
@@ -45,13 +47,17 @@ module.exports.bootstrap = function(cb) {
         };
     });
     SocketManager._.on('getInt', function() {
-        return intStatHistory[WEBSITE + IPVX];
+        return intStatHistory;
     });
     SocketManager._.on('getHourly', function() {
         return hourlyStatHistory;
     });
     SocketManager._.on('getEach', function(callback) {
         Ping.find({
+            where: {
+                w: WEBSITE,
+                t: IPVX
+            },
             limit: MAX_EACH_HISTORY,
             sort: 'id DESC'
         }, function(err, pings) {
@@ -68,28 +74,22 @@ module.exports.bootstrap = function(cb) {
                 return sails.log.error(err)
             };
 
-            var hash = w + t; // Hash to w+t
-            if (!intStat.hasOwnProperty(hash)) {
-                intStat[hash] = {
-                    w: w,
-                    t: t,
-                    id: 0
-                };
-                intStatReset(hash);
-                intStatHistory[hash] = [];
+            intStat.total += p;
+            intStat.count++;
+            if (intStat.l == 0 || (p < intStat.l && p > 0)) {
+                intStat.l = p;
             };
-            intStat[hash].total += p;
-            intStat[hash].count++;
-            if (intStat[hash].l == 0 || (p < intStat[hash].l && p > 0)) {
-                intStat[hash].l = p;
-            };
-            if (p > intStat[hash].h) {
-                intStat[hash].h = p;
+            if (p > intStat.h) {
+                intStat.h = p;
             };
 
             if (created.id % RATE_INTERVAL == 0) {
                 // TODO: in newest 1000 pings, lagPerc & lossRate per 20 pings
                 Ping.find({
+                    where: {
+                        w: WEBSITE,
+                        t: IPVX
+                    },
                     id: {
                         '>': created.id - RATE_RANGE
                     },
@@ -128,38 +128,40 @@ module.exports.bootstrap = function(cb) {
         });
     };
     setInterval(function() { // interval update
-        for (var hash in intStat) {
-            var id = intStat[hash].id;
-            var w = intStat[hash].w;
-            var t = intStat[hash].t;
-            var l = intStat[hash].l;
-            var h = intStat[hash].h;
-            var total = intStat[hash].total;
-            var count = intStat[hash].count;
-            intStatReset(hash);
+        var id = intStat.id;
+        var w = intStat.w;
+        var t = intStat.t;
+        var l = intStat.l;
+        var h = intStat.h;
+        var total = intStat.total;
+        var count = intStat.count;
+        intStatReset();
 
-            var intStatInfo = {
-                id: id,
-                l: l,
-                h: h,
-                w: w,
-                t: t,
-                avg: count == 0 ? 0 : total / count
-            };
-            intStatHistory[hash].push(intStatInfo);
-            if (intStatHistory[hash].length > MAX_INT_HISTORY) {
-                intStatHistory[hash].shift();
-            }
-            SocketManager._.emit('pingInt', intStatInfo);
-
-            intStat[hash].id++;
+        var intStatInfo = {
+            id: id,
+            l: l,
+            h: h,
+            w: w,
+            t: t,
+            avg: count == 0 ? 0 : total / count
+        };
+        intStatHistory.push(intStatInfo);
+        if (intStatHistory.length > MAX_INT_HISTORY) {
+            intStatHistory.shift();
         }
+        SocketManager._.emit('pingInt', intStatInfo);
+
+        intStat.id++;
     }, INT_INTERVAL);
 
     setInterval(function() { // hourly update
         var now = new Date();
         var currHourlyStart = new Date(now.getTime() - HOURLY_INTERVAL);
         Ping.find({
+            where: {
+                w: WEBSITE,
+                t: IPVX
+            },
             d: {
                 '>': currHourlyStart
             }
