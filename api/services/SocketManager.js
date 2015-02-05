@@ -6,14 +6,23 @@
  *   - pingInt: ping data based on each interval
  */
 module.exports = function() {
+    var _this = this;
     var socketIds = {};
+    var on = {};
     sails.io.on('connection', function(socket) {
         socketIds[socket.id] = true;
+        socket.on('getInt', function() {
+            _this.emit('getInt', on.getInt());
+        })
+        socket.on('getEach', function() {
+            on.getEach(function(pings) {
+                _this.emit('getEach', pings);
+            });
+        })
         socket.on('disconnect', function() {
             delete socketIds[socket.id];
         })
     });
-    var _this = this;
 
     /**
      * List all connected socket ids.
@@ -29,5 +38,9 @@ module.exports = function() {
 
     this.emit = function(event, data) {
         sails.sockets.emit(_this.listIds(), event, data);
+    };
+
+    this.on = function(event, fn) {
+        on[event] = fn;
     }
 }

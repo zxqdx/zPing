@@ -12,17 +12,30 @@
 module.exports.bootstrap = function(cb) {
     SocketManager._ = new SocketManager();
 
+    var WEBSITE = 'www.acfun.tv';
+    var IPVX = 4;
     var LAG_MS = 200; // Pings above are treated as lag
     var OVERALL_RANGE = 1000; // Newest OVERALL_RANGE pings are in overall stats.
     var OVERALL_INTERVAL = 20; // Calculate overall stats in given interval (ms).
+    var MAX_EACH_HISTORY = 5; // maximum number of storing eachPing history events
+    var MAX_INT_HISTORY = 5; // maximum number of storing intPing history events
 
     var overallStat = {};
     var intStat = {};
+    var intStatHistory = {};
     var intStatReset = function(hash) {
         ['l', 'h', 'total', 'count'].map(function(x) {
             intStat[hash][x] = 0;
         });
     };
+    SocketManager._.on('getInt', function() {
+        return intStatHistory[WEBSITE + IPVX];
+    });
+    SocketManager._.on('getEach', function(callback) {
+        Ping.find({limit: MAX_EACH_HISTORY, sort: 'id DESC'}, function(err, pings) {
+            callback(pings);
+        })
+    });
     var createPing = function(w, p, t) {
         Ping.create({
             w: w,
@@ -41,6 +54,7 @@ module.exports.bootstrap = function(cb) {
                     id: 0
                 };
                 intStatReset(hash);
+                intStatHistory[hash] = [];
             };
             intStat[hash].total += p;
             intStat[hash].count++;
@@ -62,7 +76,7 @@ module.exports.bootstrap = function(cb) {
                     var lossCount = 0;
                     var lagSec = 0;
                     var totalSec = (pings[pings.length - 1].d.getTime() -
-                                    pings[0].d.getTime()) / 1000;
+                        pings[0].d.getTime()) / 1000;
                     var totalPing = 0;
                     for (var i = 0; i < pings.length; i++) {
                         if (pings[i].p == 0) {
@@ -74,16 +88,16 @@ module.exports.bootstrap = function(cb) {
                             lagSec += (pings[i].d.getTime() - pings[i - 1].d.getTime()) / 1000;
                         };
                     };
+
                     SocketManager._.emit('rate', {
                         lagRate: parseInt(lagSec / totalSec * 100),
                         lossRate: parseInt(lossCount / pings.length * 100),
-                        avgPing: pings.length == lossCount
-                                 ? 0 : parseInt(totalPing / (pings.length - lossCount))
+                        avgPing: pings.length == lossCount ? 0 : parseInt(totalPing / (pings.length - lossCount))
                     });
                 })
             };
 
-            SocketManager._.emit('pingUnit', {
+            SocketManager._.emit('pingEach', {
                 w: w,
                 p: p,
                 t: t,
@@ -102,21 +116,26 @@ module.exports.bootstrap = function(cb) {
             var count = intStat[hash].count;
             intStatReset(hash);
 
-            SocketManager._.emit('pingInt', {
+            var intStatInfo = {
                 id: id,
                 l: l,
                 h: h,
                 w: w,
                 t: t,
                 avg: count == 0 ? 0 : total / count
-            });
+            };
+            intStatHistory[hash].push(intStatInfo);
+            if (intStatHistory[hash].length > MAX_INT_HISTORY) {
+                intStatHistory[hash].shift();
+            }
+            SocketManager._.emit('pingInt', intStatInfo);
 
-            intStat[hash].id++
+            intStat[hash].id++;
         }
     }, 5000);
 
     var testPs = new PingService({
-        website: 'www.acfun.tv',
+        website: WEBSITE,
         on: {
             data: createPing,
             error: function(err) {

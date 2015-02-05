@@ -132,23 +132,42 @@ $(document).ready(function() {
     }
     var lossRateCht = new Chart(lossRateCtx).Doughnut(lossRateDat, lossRateOpt);
     //=============================================================
-    io.socket.on('pingUnit', function(msg) {
-        pingCht['each'].addData([msg.p], msg.id);
-        while (pingCht['each'].datasets[0].points.length > 20) {
-            pingCht['each'].removeData();
-        };
-        if (msg.p == 0) {
-            $('#currPing .number').html('----');
-        } else {
-            $('#currPing .number').html(msg.p);
-        };
-    });
-    io.socket.on('pingInt', function(msg) {
-        pingCht['int'].addData([msg.avg, msg.h, msg.l], msg.id);
-        while (pingCht['int'].datasets[0].points.length > 25) {
+    io.socket.on('connect', function() {
+        io.socket.emit('getInt');
+        io.socket.on('getInt', function(msg) {
+            for (var i = 0; i < msg.length; i++) {
+                pingCht['int'].addData([msg[i].avg, msg[i].h, msg[i].l], msg[i].id % 100);
+            };
             pingCht['int'].removeData();
-        };
+            pingCht['int'].removeData();
+            io.socket.on('pingInt', function(msg) {
+                pingCht['int'].addData([msg.avg, msg.h, msg.l], msg.id % 100);
+                while (pingCht['int'].datasets[0].points.length > 25) {
+                    pingCht['int'].removeData();
+                };
+            });
+        });
+        io.socket.emit('getEach');
+        io.socket.on('getEach', function(msg) {
+            for (var i = 0; i < msg.length; i++) {
+                pingCht['each'].addData([msg[i].p], msg[i].id % 100);
+            };
+            pingCht['each'].removeData();
+            pingCht['each'].removeData();
+            io.socket.on('pingEach', function(msg) {
+                pingCht['each'].addData([msg.p], msg.id % 100);
+                while (pingCht['each'].datasets[0].points.length > 20) {
+                    pingCht['each'].removeData();
+                };
+                if (msg.p == 0) {
+                    $('#currPing .number').html('----');
+                } else {
+                    $('#currPing .number').html(msg.p);
+                };
+            });
+        });
     });
+
     io.socket.on('rate', function(msg) {
         if (msg.avgPing == 0) {
             $('#currPingAvg .number').html('----');
