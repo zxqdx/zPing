@@ -23,6 +23,7 @@ linux support
 cnzz
 i18n http://git.ayaya.moe/trend/trendrobot/tree/master/config/locales
 
+website name uniform
 hourly stat
 databse ----fallback----> memory
 single website support

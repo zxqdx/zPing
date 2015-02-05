@@ -109,7 +109,18 @@ module.exports = function PingService(options) {
                          || temp.toLowerCase().indexOf('fail') > -1) {
                             ping = 0;
                         } else {
-                            var match = /time=(\d+)ms/i.exec(temp);
+                            var match = /time=([\d\.]+)ms/i.exec(temp);
+                            if (match == null) {
+                                sails.log(temp);
+                                continue
+                            };
+                            ping = parseInt(match[1], 10);
+                        }
+                    } else if (platformId == 1) { // Linux
+                        if (temp.toLowerCase().indexOf('is down') > -1) {
+                            ping = 0;
+                        } else {
+                            var match = /time=([\d\.]+) ms/i.exec(temp);
                             if (match == null) {
                                 sails.log(temp);
                                 continue
