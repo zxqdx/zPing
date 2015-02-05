@@ -57,7 +57,7 @@ module.exports = function PingService(options) {
     if (platformId == 0) { // Windows
         pingCmd += 'ping -' + options.ver + ' ' + options.website + ' -t';
     } else if (platformId == 1) { // Linux
-        pingCmd += path.join(__dirname, '../..') + 'ping' + options.ver + ' ' + options.website;
+        pingCmd += path.join(__dirname, '../..', 'ping' + options.ver) + ' ' + options.website;
         sails.log('cmd: '+pingCmd);
     }
     // Set up pings
