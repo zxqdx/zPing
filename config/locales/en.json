@@ -1,4 +1,15 @@
 {
-	"Welcome": "Welcome",
-	"A brand new app.": "A brand new app."
+    "Header Desc": "Response Time and Internet Connectivity",
+    "Header Ann": "Follow me on Github<br><a href=\"https://github.com/zxqdx\" target=\"_blank\">@zxqdx</a>",
+    "Footer Hint": "If this page is not showing correctly, please upgrade your browser.",
+    "Current": "Current",
+    "Average": "Average",
+    "Highest": "Highest",
+    "Lowest": "Lowest",
+    "Coming Soon": "Coming soon ...",
+    "Count Requests": "Requests",
+    "Count Losses": "Losses",
+    "Rate Loss": "Loss",
+    "Rate Lag": "Lag",
+    "Hourly Stat": "Hourly Statistics"
 }

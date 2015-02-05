@@ -11,17 +11,20 @@ module.exports = function() {
     var on = {};
     sails.io.on('connection', function(socket) {
         socketIds[socket.id] = true;
+        socket.on('getUrl', function() {
+            _this.emit('getUrl', on.getUrl());
+        });
         socket.on('getInt', function() {
             _this.emit('getInt', on.getInt());
-        })
+        });
         socket.on('getEach', function() {
             on.getEach(function(pings) {
                 _this.emit('getEach', pings);
             });
-        })
+        });
         socket.on('disconnect', function() {
             delete socketIds[socket.id];
-        })
+        });
     });
 
     /**

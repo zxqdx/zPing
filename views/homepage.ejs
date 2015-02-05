@@ -12,6 +12,11 @@ body {
     user-select: none;
     cursor: default;
 }
+a {
+    color: #369;
+    text-decoration: none;
+    cursor: pointer;
+}
 #header, #mainer, #utility, #footer {
     padding: 10px;
 }
@@ -228,24 +233,27 @@ canvas {
 }
 
 </style>
+<script type="text/javascript">
+__._('Current', '<%= __('Current') %>');
+__._('Average', '<%= __('Average') %>');
+__._('Highest', '<%= __('Highest') %>');
+__._('Lowest', '<%= __('Lowest') %>');
+</script>
 <div id="header">
-    <span id="url"></span>
-    <span id="desc">响应时间及网络监测（单位：ms）</span>
-    <div id="ann">
-        这是我彻底重写的当年AcFun趋势的子模块<br>
-        参与趋势娘项目欢迎加群424671026并请注明来意
-    </div>
+    <span id="url">zPing</span>
+    <span id="desc"><%= __('Header Desc') %></span>
+    <div id="ann"><%- __('Header Ann') %></div>
     <div class="clearfix"></div>
 </div>
 <div id="mainer">
     <div id="mainerStat">
         <div id="basicStat">
             <div id="currPing">
-                <span class="desc">当前</span>
+                <span class="desc"><%= __('Current') %></span>
                 <span class="number">----</span>
             </div>
             <div id="currPingAvg">
-                <span class="desc">平均</span>
+                <span class="desc"><%= __('Average') %></span>
                 <span class="number">----</span>
             </div>
             <div class="clearfix"></div>
@@ -253,41 +261,41 @@ canvas {
         <div id="overallStat">
             <div id="lagRate" class="rate">
                 <div class="number">-<span class="percent">%</span></div>
-                <div class="desc">高延时占比</div>
+                <div class="desc"><%= __('Rate Lag') %></div>
                 <canvas></canvas>
             </div>
             <div id="lossRate" class="rate">
                 <div class="number">-<span class="percent">%</span></div>
-                <div class="desc">丢包率</div>
+                <div class="desc"><%= __('Rate Loss') %></div>
                 <canvas></canvas>
             </div>
         </div>
         <div id="hourlyStat">
             <div class="title">
-                最近一小时状况 <span class="tag up">--% -</span>
+                <%= __('Hourly Stat') %> <span class="tag up">--% -</span>
             </div>
             <div class="block top">
                 <div class="blockUnit" id="hourlyCount">
                     <div class="number">----</div>
-                    <div class="desc">请求数</div>
+                    <div class="desc"><%= __('Count Requests') %></div>
                 </div>
                 <div class="blockUnit" id="hourlyLoss">
                     <div class="number">----</div>
-                    <div class="desc">丢包数</div>
+                    <div class="desc"><%= __('Count Losses') %></div>
                 </div>
             </div>
             <div class="block bottom">
                 <div class="blockUnit" id="hourlyLow">
                     <div class="number">----</div>
-                    <div class="desc">最低</div>
+                    <div class="desc"><%= __('Lowest') %></div>
                 </div>
                 <div class="blockUnit" id="hourlyAvg">
                     <div class="number">----</div>
-                    <div class="desc">平均</div>
+                    <div class="desc"><%= __('Average') %></div>
                 </div>
                 <div class="blockUnit" id="hourlyHigh">
                     <div class="number">----</div>
-                    <div class="desc">最高</div>
+                    <div class="desc"><%= __('Highest') %></div>
                 </div>
             </div>
         </div>
@@ -303,11 +311,11 @@ canvas {
     </div>
 </div>
 <div id="utility">
-    <div>敬请期待</div>
+    <div><%= __('Coming Soon') %></div>
 </div>
 <div id="footer">
     AcFun Trend Ver 4 by zxqdx, 2011~2015.<br>
     AcFun Trend Connectivity Module Ver 2.1.0 by zxqdx, 2012~2015.<br>
     zPing @ GitHub Ver 0.1.0 by zxqdx, 2015.<br>
-    若页面无任何反应或显示不正常，请升级您的浏览器。
+    <%= __('Footer Hint') %>
 </div>

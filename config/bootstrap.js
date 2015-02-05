@@ -28,6 +28,9 @@ module.exports.bootstrap = function(cb) {
             intStat[hash][x] = 0;
         });
     };
+    SocketManager._.on('getUrl', function() {
+        return {url: WEBSITE, ipvx: IPVX};
+    });
     SocketManager._.on('getInt', function() {
         return intStatHistory[WEBSITE + IPVX];
     });

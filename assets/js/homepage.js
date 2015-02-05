@@ -1,6 +1,4 @@
 $(document).ready(function() {
-    var URL = 'www.acfun.tv#ipv4';
-    $('#url').html(URL);
     //=============================================================
     // Chart.defaults.global.responsive = true // DEBUG
     Chart.defaults.global.scaleBeginAtZero = true;
@@ -36,7 +34,7 @@ $(document).ready(function() {
             tmpDat = {
                 labels: tmpStat ? tmpStat[0][0] : ["", ""],
                 datasets: [{
-                    label: "当前",
+                    label: __.t('Current'),
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -50,7 +48,7 @@ $(document).ready(function() {
             tmpDat = {
                 labels: tmpStat ? tmpStat[0][0] : ["", ""],
                 datasets: [{
-                    label: "平均",
+                    label: __.t('Average'),
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -59,7 +57,7 @@ $(document).ready(function() {
                     pointHighlightStroke: "rgba(151,187,205,1)",
                     data: tmpStat ? tmpStat[1][0] : [0, 0]
                 }, {
-                    label: "最高",
+                    label: __.t('Highest'),
                     fillColor: "rgba(199,221,232,0.2)",
                     strokeColor: "rgba(199,221,232,1)",
                     pointColor: "rgba(199,221,232,1)",
@@ -68,7 +66,7 @@ $(document).ready(function() {
                     pointHighlightStroke: "rgba(151,187,205,1)",
                     data: tmpStat ? tmpStat[1][1] : [0, 0]
                 }, {
-                    label: "最低",
+                    label: __.t('Lowest'),
                     fillColor: "rgba(65,116,140,0.2)",
                     strokeColor: "rgba(65,116,140,1)",
                     pointColor: "rgba(65,116,140,1)",
@@ -133,13 +131,19 @@ $(document).ready(function() {
     var lossRateCht = new Chart(lossRateCtx).Doughnut(lossRateDat, lossRateOpt);
     //=============================================================
     io.socket.on('connect', function() {
+        io.socket.emit('getUrl');
+        io.socket.on('getUrl', function(msg) {
+            $('#url').html(msg.url + '#ipv' + msg.ipvx);
+        });
         io.socket.emit('getInt');
         io.socket.on('getInt', function(msg) {
             for (var i = 0; i < msg.length; i++) {
                 pingCht['int'].addData([msg[i].avg, msg[i].h, msg[i].l], msg[i].id % 100);
             };
-            pingCht['int'].removeData();
-            pingCht['int'].removeData();
+            if (msg.length >= 2) {
+                pingCht['int'].removeData();
+                pingCht['int'].removeData();
+            };
             io.socket.on('pingInt', function(msg) {
                 pingCht['int'].addData([msg.avg, msg.h, msg.l], msg.id % 100);
                 while (pingCht['int'].datasets[0].points.length > 25) {
@@ -152,8 +156,10 @@ $(document).ready(function() {
             for (var i = 0; i < msg.length; i++) {
                 pingCht['each'].addData([msg[i].p], msg[i].id % 100);
             };
-            pingCht['each'].removeData();
-            pingCht['each'].removeData();
+            if (msg.length >= 2) {
+                pingCht['each'].removeData();
+                pingCht['each'].removeData();
+            };
             io.socket.on('pingEach', function(msg) {
                 pingCht['each'].addData([msg.p], msg.id % 100);
                 while (pingCht['each'].datasets[0].points.length > 20) {

@@ -6,13 +6,14 @@
  */
 
 module.exports = {
-	
+    
 
 
   /**
    * `RenderController.homepage()`
    */
   homepage: function (req, res) {
+    req.setLocale('en');
     return res.view('homepage');
   }
 };

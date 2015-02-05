@@ -1,0 +1,15 @@
+{
+	"Header Desc": "响应时间及网络监测（单位：ms）",
+    "Header Ann": "这是我彻底重写的当年AcFun趋势的子模块<br>参与趋势娘项目欢迎加群424671026并请注明来意",
+    "Footer Hint": "若页面无任何反应或显示不正常，请升级您的浏览器。",
+    "Current": "当前",
+    "Average": "平均",
+    "Highest": "最高",
+    "Lowest": "最低",
+    "Coming Soon": "敬请期待",
+    "Count Requests": "请求数",
+    "Count Losses": "丢包数",
+    "Rate Loss": "丢包率",
+    "Rate Lag": "高延时占比",
+    "Hourly Stat": "最近一小时数据"
+}
