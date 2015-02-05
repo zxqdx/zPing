@@ -46,7 +46,7 @@ module.exports = function PingService(options) {
     var platformId;
     if (platform.indexOf('win32') === 0) { // Windows
         platformId = 0;
-    } else if (platform.indexOf('linux') > 0) { // Linux
+    } else if (platform.indexOf('linux') > -1) { // Linux
         platformId = 1;
     } else { // Raise error.
         throw new Error('Unsupported platform ' + platform);
