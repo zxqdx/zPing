@@ -24,6 +24,7 @@ module.exports = function PingService(options) {
     var exec = require('child_process').exec;
     var spawn = require('child_process').spawn;
     var os = require('os');
+    var path = require('path');
     // Parse options
     var options = options;
     var optOrDefault = function(option, def) {
@@ -56,9 +57,8 @@ module.exports = function PingService(options) {
     if (platformId == 0) { // Windows
         pingCmd += 'ping -' + options.ver + ' ' + options.website + ' -t';
     } else if (platformId == 1) { // Linux
-        pingCmd += './ping' + options.ver + ' ' + options.website;
+        pingCmd += path.join(__dirname, '../..') + 'ping' + options.ver + ' ' + options.website;
         sails.log('cmd: '+pingCmd);
-        sails.log(__dirname);
     }
     // Set up pings
     var dataBuff = '';
