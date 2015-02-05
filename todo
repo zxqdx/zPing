@@ -19,11 +19,10 @@ bar chart(by day)
 
 ---------- color: 97BBCD
 */
-hourly stat
-user-select:none
 linux support
-i18n http://git.ayaya.moe/trend/trendrobot/tree/master/config/locales
 cnzz
+i18n http://git.ayaya.moe/trend/trendrobot/tree/master/config/locales
 
+hourly stat
 databse ----fallback----> memory
 single website support

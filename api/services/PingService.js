@@ -46,13 +46,19 @@ module.exports = function PingService(options) {
     var platformId;
     if (platform.indexOf('win32') === 0) { // Windows
         platformId = 0;
+    } else if (platform.indexOf('linux') > 0) { // Linux
+        platformId = 1;
     } else { // Raise error.
         throw new Error('Unsupported platform ' + platform);
     }
     // Generate ping command
-    var pingCmd = 'ping -' + options.ver + ' ';
+    var pingCmd = '';
     if (platformId == 0) { // Windows
-        pingCmd += 'www.google.com -t';
+        pingCmd += 'ping -' + options.ver + ' ' + options.website + ' -t';
+    } else if (platformId == 1) { // Linux
+        pingCmd += './ping' + options.ver + ' ' + options.website;
+        sails.log('cmd: '+pingCmd);
+        sails.log(__dirname);
     }
     // Set up pings
     var dataBuff = '';
@@ -77,7 +83,6 @@ module.exports = function PingService(options) {
             if (childKilled) {return;};
             if (child.stdout.bytesRead > options.maxBuffer * 1024) {
                 // Buffer will exceed
-                sails.log("KILLING"+child.pid);
                 if (platformId == 0) { // Windows
                     spawn("taskkill", ["/pid", child.pid, '/f', '/t']);
                 };
