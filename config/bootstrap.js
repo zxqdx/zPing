@@ -75,16 +75,17 @@ module.exports.bootstrap = function(cb) {
             };
 
             intStat.total += p;
-            intStat.count++;
             if (intStat.l == 0 || (p < intStat.l && p > 0)) {
                 intStat.l = p;
+            };
+            if (p > 0) {
+                intStat.count++;
             };
             if (p > intStat.h) {
                 intStat.h = p;
             };
 
             if (created.id % RATE_INTERVAL == 0) {
-                // TODO: in newest 1000 pings, lagPerc & lossRate per 20 pings
                 Ping.find({
                     where: {
                         w: WEBSITE,

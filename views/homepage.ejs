@@ -181,16 +181,33 @@ a {
     height: 150px;
     margin-right: 20px;
     margin-bottom: 20px;
-    border: 1px white solid;
+    outline: 1px black solid;
+}
+#utility .navArea { /* An area consists of 2 * 2 navs */
+    float: left;
+    width: 340px;
+    height: 340px;
+}
+#utility .nav.c0 {
+    outline-color: #ccc;
+    -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
+            transition: outline 0.1s linear, box-shadow 0.1s linear;
+}
+#utility .nav.c0.active {
+    outline-color: #666;
+    -webkit-box-shadow: 0 0 5px #666;
+       -moz-box-shadow: 0 0 5px #666;
+            box-shadow: 0 0 5px #666;
 }
 #utility .nav.c1 {
-    border-color: #CCF7DF;
-    -webkit-transition: border 0.1s linear, box-shadow 0.1s linear;
-       -moz-transition: border 0.1s linear, box-shadow 0.1s linear;
-            transition: border 0.1s linear, box-shadow 0.1s linear;
+    outline-color: #CCF7DF;
+    -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
+            transition: outline 0.1s linear, box-shadow 0.1s linear;
 }
 #utility .nav.c1.active {
-    border-color: #84DBAA;
+    outline-color: #84DBAA;
     -webkit-box-shadow: 0 0 5px #84DBAA;
        -moz-box-shadow: 0 0 5px #84DBAA;
             box-shadow: 0 0 5px #84DBAA;
@@ -245,6 +262,15 @@ canvas {
     }
     #eachPingChart canvas, #intPingChart canvas {
         height: 240px;
+    }
+    #utility .nav {
+        outline: none;
+        margin-right: 10px;
+        margin-bottom: 10px;
+    }
+    #utility .navArea {
+        width: 320px;
+        height: 320px;
     }
 }
 
@@ -328,7 +354,19 @@ __._('Lowest', '<%= __('Lowest') %>');
 </div>
 <div id="utility">
     <!--<div><%= __('Coming Soon') %></div>-->
-    <div class="nav c1 active"></div>
+    <div class="navArea">
+        <div class="nav"></div>
+        <div class="nav"></div>
+        <div class="nav"></div>
+        <div class="nav"></div>
+    </div>
+    <div class="navArea">
+        <div class="nav"></div>
+        <div class="nav"></div>
+        <div class="nav long"></div>
+    </div>
+    <div class="navArea"></div>
+    <div class="navArea"></div>
     <div class="clearfix"></div>
 </div>
 <div id="footer">
