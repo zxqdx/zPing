@@ -26,7 +26,7 @@ function Nav(container) {
     /**
      * Add a nav block.
      * @param {string} id nav's element id
-     * @param {options} options {
+     * @param {object} options {
      *     isLong: {boolean} whether the nav is long or short
      *     color: {int} the color type
      *     isSupp: {int} whether the nav is supplementary
@@ -36,7 +36,7 @@ function Nav(container) {
      *                       1 = yes, appear once
      *                       2 = yes, appear any times
      *     html: {string / function(navId)} the html of the nav
-     *     clickable: {boolean} whether the nav can be clicked
+     *     click: {function(navId)} triggers when nav has been clicked
      *     after: {function(navId)} triggers after rendering
      * }
      */
@@ -46,13 +46,13 @@ function Nav(container) {
             return console.error(navId + ' already exists!');
         };
         if (!options) {
-            options = {}
+            options = {};
         };
         var isLong = options.hasOwnProperty('isLong') ? options.isLong : false;
         var color = options.hasOwnProperty('color') ? options.color : randChoose(COLORS);
         var isSupp = options.hasOwnProperty('isSupp') ? options.isSupp : 0;
         var html = options.hasOwnProperty('html') ? options.html : '';
-        var clickable = options.hasOwnProperty('clickable') ? options.clickable : false;
+        var click = options.hasOwnProperty('click') ? options.click : false;
         var after = options.hasOwnProperty('after') ? options.after : false;
         navBlocks[navId] = {
             navId: navId,
@@ -60,7 +60,7 @@ function Nav(container) {
             color: color,
             isSupp: isSupp,
             html: html,
-            clickable: clickable,
+            click: click,
             after: after,
             disabled: false,
             suppNo: 0
@@ -89,6 +89,24 @@ function Nav(container) {
         navBlocks[navId].disabled = true;
     };
     /**
+     * Get template's html.
+     * @param  {int} type {
+     *     1: title - subtitle
+     *     2: title(solo)
+     *     3: img (150*150)
+     * }
+     * @param  {object} options {
+     *     title: {string} if any
+     *     subtitle: {string} if any
+     *     img: {string} url if any
+     * }
+     * @return {string} html content
+     */
+    this.template = function(type, options) {
+        // TODO
+
+    };
+    /**
      * Render the html.
      */
     this.render = function() {
@@ -113,14 +131,14 @@ function Nav(container) {
         var navHtmls = [];
         var generateInfo = function(eachNav, navId) {
             var html = '';
-            html += '<div id="' + navId.substring(1) + '" class="nav active' + (eachNav.isLong ? ' long' : '') + (eachNav.clickable ? ' clickable' : '') + ' c' + eachNav.color + '">';
+            html += '<div id="' + navId.substring(1) + '" class="nav active' + (eachNav.isLong ? ' long' : '') + (eachNav.click ? ' clickable' : '') + ' c' + eachNav.color + '">';
             if (typeof eachNav.html === 'function') {
                 html += eachNav.html(navId);
             } else {
                 html += eachNav.html;
             };
             html += '</div>';
-            return [html, navId, eachNav.after];
+            return [html, navId, eachNav.after, eachNav.click];
         };
         // Fill in primary nav blocks.
         var currIndex = 0;
@@ -148,7 +166,7 @@ function Nav(container) {
         while (navHtmls.length % 4 != 0) {
             navHtmls.push(null);
         }
-        // "Shuffle" and fill in supplementary nav blocks.
+        // Fill in supplementary nav blocks.
         // - Fill in one-time supp nav
         var oneTimeSupps = (function() {
             var tempList = [];
@@ -173,9 +191,33 @@ function Nav(container) {
                 currIndex++;
             };
         };
-        console.log(navHtmls);
         // - Fill in any-times supp nav
-
+        var anyTimeSupps = (function() {
+            var tempList = [];
+            for (var navId in navBlocks) {
+                if ((!navBlocks[navId].disabled) && (navBlocks[navId].isSupp > 1)) {
+                    tempList.push(navBlocks[navId]);
+                };
+            };
+            return tempList;
+        })();
+        currIndex = 0;
+        for (var i = 0; i < navHtmls.length; i++) {
+            if (anyTimeSupps.length == 0) {
+                break;
+            };
+            if (currIndex == anyTimeSupps.length) {
+                currIndex = 0;
+            };
+            if (navHtmls[i] === null) {
+                var eachNav = anyTimeSupps[currIndex];
+                var eachNavInfo = generateInfo(eachNav, eachNav.navId + suppCounter);
+                navHtmls[i] = eachNavInfo;
+                suppCounter++;
+                currIndex++;
+            };
+        };
+        console.log(navHtmls);
         // Apply html.
         $(container).html((function() {
             var html = '';
@@ -214,11 +256,20 @@ function Nav(container) {
                     currCount++;
                 };
             };
-            // Callback after rendering.
+            // Callback and binding after rendering.
             for (var i = 0; i < navHtmls.length; i++) {
                 if (navHtmls[i]) {
                     if (navHtmls[i][2]) {
                         navHtmls[i][2](navHtmls[i][1]);
+                    };
+                    if (navHtmls[i][3]) {
+                        $(document)
+                            .off('click', navHtmls[i][1])
+                            .on('click', navHtmls[i][1], function(i) {
+                                return function() {
+                                    navHtmls[i][3](navHtmls[i][1]);
+                                };
+                            }(i));
                     };
                 };
             };
@@ -245,25 +296,34 @@ function Nav(container) {
             }(navId), 2000);
         }
     });
+    this.add('acnya', {
+        color: 2,
+        isSupp: 2
+    })
 }
 var nav = new Nav('#utility');
 $(document).ready(function() {
     nav.add('n1');
     nav.add('n2', {
-        clickable: true
+        click: function(navId) {
+            alert(navId);
+        }
     });
     nav.add('n3', {
         isLong: true
     });
     nav.add('n4');
-    nav.add('n5', {
+    nav.add('n5');
+    nav.add('n6');
+    nav.add('n7', {
         isLong: true
     });
-    nav.add('n6');
-    nav.add('n7');
     nav.add('n8');
     nav.add('n9');
     nav.add('n10');
-    nav.add('n11');
+    nav.add('n11', {
+        isLong: true
+    });
+    nav.add('n12');
     nav.render();
 });

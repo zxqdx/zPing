@@ -215,6 +215,18 @@ a {
        -moz-box-shadow: 0 0 5px #84DBAA;
             box-shadow: 0 0 5px #84DBAA;
 }
+#utility .nav.c2 {
+    outline-color: #FFDCD3;
+    -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
+            transition: outline 0.1s linear, box-shadow 0.1s linear;
+}
+#utility .nav.c2.active {
+    outline-color: #FFAF9A;
+    -webkit-box-shadow: 0 0 5px #FFAF9A;
+       -moz-box-shadow: 0 0 5px #FFAF9A;
+            box-shadow: 0 0 5px #FFAF9A;
+}
 #utility .nav.long {
     width: 320px; /* nav.width * 2 + nav.margin-right */
 }
@@ -272,6 +284,8 @@ canvas {
         margin-bottom: 10px;
     }
     #utility .navArea {
+        margin: 0 auto;
+        float: none;
         width: 320px;
         height: 320px;
     }
