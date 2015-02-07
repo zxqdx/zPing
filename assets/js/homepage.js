@@ -1,3 +1,5 @@
+var VERSION = null;
+var URL = null;
 $(document).ready(function() {
     //=============================================================
     // Chart.defaults.global.responsive = true // DEBUG
@@ -134,6 +136,7 @@ $(document).ready(function() {
         io.socket.emit('getUrl');
         io.socket.on('getUrl', function(msg) {
             $('#url').html(msg.url + '#ipv' + msg.ipvx);
+            URL = msg;
         });
         io.socket.emit('getInt');
         io.socket.on('getInt', function(msg) {
@@ -174,7 +177,6 @@ $(document).ready(function() {
         });
         var hourlyStat = {};
         var renderHourlyStat = function() {
-            console.log(hourlyStat);
             $('#hourlyCount .number').html(hourlyStat.c == 0 ? '----' : hourlyStat.c);
             $('#hourlyLoss .number').html((hourlyStat.loss == 0 && hourlyStat.c == 0) ? '----' : hourlyStat.loss);
             $('#hourlyLow .number').html(hourlyStat.l == 0 ? '----' : hourlyStat.l);
@@ -203,23 +205,29 @@ $(document).ready(function() {
                 renderHourlyStat();
             });
         });
+        io.socket.emit('getVersion');
+        io.socket.on('getVersion', function(msg) {
+            $('#version').html(msg);
+            VERSION = msg;
+        });
+        io.socket.on('rate', function(msg) {
+            if (msg.avgPing == 0) {
+                $('#currPingAvg .number').html('----');
+            } else {
+                $('#currPingAvg .number').html(msg.avgPing);
+            };
+            $('#lossRate .number').html(msg.lossRate + '<span class="percent">%</span>');
+            $('#lagRate .number').html(msg.lagRate + '<span class="percent">%</span>');
+            lossRateCht.segments[0].value = msg.lossRate;
+            lossRateCht.segments[1].value = 100 - msg.lossRate;
+            lagRateCht.segments[0].value = msg.lagRate;
+            lagRateCht.segments[1].value = 100 - msg.lagRate;
+            lossRateCht.update();
+            lagRateCht.update();
+        });
     });
 
-    io.socket.on('rate', function(msg) {
-        if (msg.avgPing == 0) {
-            $('#currPingAvg .number').html('----');
-        } else {
-            $('#currPingAvg .number').html(msg.avgPing);
-        };
-        $('#lossRate .number').html(msg.lossRate + '<span class="percent">%</span>');
-        $('#lagRate .number').html(msg.lagRate + '<span class="percent">%</span>');
-        lossRateCht.segments[0].value = msg.lossRate;
-        lossRateCht.segments[1].value = 100 - msg.lossRate;
-        lagRateCht.segments[0].value = msg.lagRate;
-        lagRateCht.segments[1].value = 100 - msg.lagRate;
-        lossRateCht.update();
-        lagRateCht.update();
-    });
+
     //=============================================================
     $(window).resize(function() {
         drawCht('each');

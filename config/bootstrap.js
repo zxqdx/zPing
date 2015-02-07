@@ -21,6 +21,7 @@ module.exports.bootstrap = function(cb) {
     var MAX_INT_HISTORY = 5; // maximum number of storing intPing history events
     var INT_INTERVAL = 5000; // Calculate interval stats in given interval (ms)
     var HOURLY_INTERVAL = 3600 * 1000; // Calculate hourly stats in given interval (ms)
+    var VERSION = '0.3.0'; // The version of zPing
 
     var intStat = {
         id: 0
@@ -63,6 +64,9 @@ module.exports.bootstrap = function(cb) {
         }, function(err, pings) {
             callback(pings);
         })
+    });
+    SocketManager._.on('getVersion', function(callback) {
+        return VERSION;
     });
     var createPing = function(w, p, t) {
         Ping.create({

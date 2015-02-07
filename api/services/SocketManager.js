@@ -25,6 +25,9 @@ module.exports = function() {
         socket.on('getHourly', function() {
             _this.emit('getHourly', on.getHourly());
         });
+        socket.on('getVersion', function() {
+            _this.emit('getVersion', on.getVersion());
+        });
         socket.on('disconnect', function() {
             delete socketIds[socket.id];
         });

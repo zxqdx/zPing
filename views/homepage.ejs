@@ -171,17 +171,20 @@ a {
     height: 450px;
 }
 #utility {
-    min-height: 350px;
-    line-height: 350px;
+    /*min-height: 350px;*/
     overflow: hidden;
 }
 #utility .nav {
+    display: none;
     float: left;
     width: 150px;
     height: 150px;
     margin-right: 20px;
     margin-bottom: 20px;
     outline: 1px black solid;
+}
+#utility .nav.clickable {
+    cursor: pointer;
 }
 #utility .navArea { /* An area consists of 2 * 2 navs */
     float: left;
@@ -354,24 +357,10 @@ __._('Lowest', '<%= __('Lowest') %>');
 </div>
 <div id="utility">
     <!--<div><%= __('Coming Soon') %></div>-->
-    <div class="navArea">
-        <div class="nav"></div>
-        <div class="nav"></div>
-        <div class="nav"></div>
-        <div class="nav"></div>
-    </div>
-    <div class="navArea">
-        <div class="nav"></div>
-        <div class="nav"></div>
-        <div class="nav long"></div>
-    </div>
-    <div class="navArea"></div>
-    <div class="navArea"></div>
-    <div class="clearfix"></div>
 </div>
 <div id="footer">
     AcFun Trend Ver 4 by zxqdx, 2011~2015.<br>
     AcFun Trend Connectivity Module Ver 2.1.0 by zxqdx, 2012~2015.<br>
-    zPing @ GitHub Ver 0.1.0 by zxqdx, 2015.<br>
+    zPing Ver <span id="version">---</span> @ GitHub by zxqdx, 2015.<br>
     <%= __('Footer Hint') %>
 </div>
