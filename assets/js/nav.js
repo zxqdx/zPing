@@ -36,7 +36,7 @@ function Nav(container) {
      *                       1 = yes, appear once
      *                       2 = yes, appear any times
      *     html: {string / function(navId)} the html of the nav
-     *     click: {function(navId)} triggers when nav has been clicked
+     *     on: {string: function(navId), ...} triggers when nav fires the event
      *     after: {function(navId)} triggers after rendering
      * }
      */
@@ -52,7 +52,7 @@ function Nav(container) {
         var color = options.hasOwnProperty('color') ? options.color : randChoose(COLORS);
         var isSupp = options.hasOwnProperty('isSupp') ? options.isSupp : 0;
         var html = options.hasOwnProperty('html') ? options.html : '';
-        var click = options.hasOwnProperty('click') ? options.click : false;
+        var on = options.hasOwnProperty('on') ? options.on : false;
         var after = options.hasOwnProperty('after') ? options.after : false;
         navBlocks[navId] = {
             navId: navId,
@@ -60,7 +60,7 @@ function Nav(container) {
             color: color,
             isSupp: isSupp,
             html: html,
-            click: click,
+            on: on,
             after: after,
             disabled: false,
             suppNo: 0
@@ -137,14 +137,14 @@ function Nav(container) {
         var navHtmls = [];
         var generateInfo = function(eachNav, navId) {
             var html = '';
-            html += '<div id="' + navId.substring(1) + '" class="nav active' + (eachNav.isLong ? ' long' : '') + (eachNav.click ? ' clickable' : '') + ' c' + eachNav.color + '">';
+            html += '<div id="' + navId.substring(1) + '" class="nav active' + (eachNav.isLong ? ' long' : '') + (eachNav.on && eachNav.on.hasOwnProperty('click') ? ' clickable' : '') + ' c' + eachNav.color + '">';
             if (typeof eachNav.html === 'function') {
                 html += eachNav.html(navId);
             } else {
                 html += eachNav.html;
             };
             html += '</div>';
-            return [html, navId, eachNav.after, eachNav.click];
+            return [html, navId, eachNav.after, eachNav.on];
         };
         // Fill in primary nav blocks.
         var currIndex = 0;
@@ -269,13 +269,15 @@ function Nav(container) {
                         navHtmls[i][2](navHtmls[i][1]);
                     };
                     if (navHtmls[i][3]) {
-                        $(document)
-                            .off('click', navHtmls[i][1])
-                            .on('click', navHtmls[i][1], function(i) {
-                                return function() {
-                                    navHtmls[i][3](navHtmls[i][1]);
-                                };
-                            }(i));
+                        for (var e in navHtmls[i][3]) {
+                            $(document)
+                                .off(e, navHtmls[i][1])
+                                .on(e, navHtmls[i][1], function(i) {
+                                    return function() {
+                                        navHtmls[i][3][e](navHtmls[i][1]);
+                                    };
+                                }(i));
+                        };
                     };
                 };
             };
@@ -317,8 +319,10 @@ var nav = new Nav('#utility');
 $(document).ready(function() {
     nav.add('n1');
     nav.add('n2', {
-        click: function(navId) {
-            alert(navId);
+        on: {
+            click: function(navId) {
+                alert(navId);
+            }
         }
     });
     nav.add('n3', {
