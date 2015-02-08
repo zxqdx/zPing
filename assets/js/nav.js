@@ -6,7 +6,7 @@ function Nav(container) {
      */
     var randChoose = function(list) {
         return list[Math.floor(Math.random() * list.length)];
-    }
+    };
 
     var _this = this;
     var container = container;
@@ -104,7 +104,13 @@ function Nav(container) {
      */
     this.template = function(type, options) {
         // TODO
-
+        var html = '';
+        if (type == 2) {
+            html += '<div class="title solo">' + options.title + '</div>';
+        } else if (type == 3) {
+            html += '<img class="image" src="' + options.img + '"></img>'
+        };
+        return html;
     };
     /**
      * Render the html.
@@ -280,15 +286,16 @@ function Nav(container) {
         color: 0,
         isSupp: 1,
         html: function() {
-            return '----';
+            return _this.template(2, {
+                title: '----'
+            });
         },
         after: function(navId) {
             var intId = setInterval(function(navId) {
                 return function() {
                     if (!(typeof VERSION === 'undefined')) {
                         if (VERSION) {
-                            // TODO: update version info
-                            $(navId).html(VERSION);
+                            $(navId + ' .title').html('Ver ' + VERSION);
                             clearInterval(intId);
                         };
                     };
@@ -298,7 +305,12 @@ function Nav(container) {
     });
     this.add('acnya', {
         color: 2,
-        isSupp: 2
+        isSupp: 2,
+        html: function() {
+            return _this.template(3, {
+                img: '/images/acfun/' + (Math.floor(Math.random() * 33) + 1) + '.png'
+            });
+        }
     })
 }
 var nav = new Nav('#utility');

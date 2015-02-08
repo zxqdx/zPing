@@ -20,7 +20,11 @@ bar chart(by day)
 ---------- color: 97BBCD
 */
 navblocks
-
+    options.on
 license
+
+navblocks reorder
+navblocks control panel
+
 cnzz
 databse ----fallback----> memory
