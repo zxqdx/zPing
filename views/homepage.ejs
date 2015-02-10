@@ -216,16 +216,52 @@ a {
             box-shadow: 0 0 5px #84DBAA;
 }
 #utility .nav.c2 {
-    outline-color: #FFDCD3;
+    outline-color: #FFD0C4;
     -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
        -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
             transition: outline 0.1s linear, box-shadow 0.1s linear;
 }
 #utility .nav.c2.active {
-    outline-color: #FFAF9A;
-    -webkit-box-shadow: 0 0 5px #FFAF9A;
-       -moz-box-shadow: 0 0 5px #FFAF9A;
-            box-shadow: 0 0 5px #FFAF9A;
+    outline-color: #CF6F56;
+    -webkit-box-shadow: 0 0 5px #CF6F56;
+       -moz-box-shadow: 0 0 5px #CF6F56;
+            box-shadow: 0 0 5px #CF6F56;
+}
+#utility .nav.c3 {
+    outline-color: #C7CAE1;
+    -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
+            transition: outline 0.1s linear, box-shadow 0.1s linear;
+}
+#utility .nav.c3.active {
+    outline-color: #354BF3;
+    -webkit-box-shadow: 0 0 5px #354BF3;
+       -moz-box-shadow: 0 0 5px #354BF3;
+            box-shadow: 0 0 5px #354BF3;
+}
+#utility .nav.c4 {
+    outline-color: #B0F2CD;
+    -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
+            transition: outline 0.1s linear, box-shadow 0.1s linear;
+}
+#utility .nav.c4.active {
+    outline-color: #1AA657;
+    -webkit-box-shadow: 0 0 5px #1AA657;
+       -moz-box-shadow: 0 0 5px #1AA657;
+            box-shadow: 0 0 5px #1AA657;
+}
+#utility .nav.c5 {
+    outline-color: #B1DAEE;
+    -webkit-transition: outline 0.1s linear, box-shadow 0.1s linear;
+       -moz-transition: outline 0.1s linear, box-shadow 0.1s linear;
+            transition: outline 0.1s linear, box-shadow 0.1s linear;
+}
+#utility .nav.c5.active {
+    outline-color: #02A2EF;
+    -webkit-box-shadow: 0 0 5px #02A2EF;
+       -moz-box-shadow: 0 0 5px #02A2EF;
+            box-shadow: 0 0 5px #02A2EF;
 }
 #utility .nav.long {
     width: 320px; /* nav.width * 2 + nav.margin-right */
@@ -233,18 +269,23 @@ a {
 #utility .nav .title {
     font-size: 32px;
     text-align: center;
-    width: 150px;
-    height: 75px;
+    width: 100%;
+    height: 50%;
     line-height: 75px;
 }
 #utility .nav .title.solo {
-    height: 150px;
+    height: 100%;
     line-height: 150px;
     font-size: 24px;
 }
+#utility .nav .subtitle {
+    font-size: 18px;
+    text-align: center;
+    height: 50%;
+}
 #utility .nav .image {
-    width: 150px;
-    height: 150px;
+    width: 100%;
+    height: 100%;
 }
 
 #footer {
@@ -313,6 +354,10 @@ __._('Current', '<%= __('Current') %>');
 __._('Average', '<%= __('Average') %>');
 __._('Highest', '<%= __('Highest') %>');
 __._('Lowest', '<%= __('Lowest') %>');
+__._('Settings', '<%= __('Settings') %>');
+__._('Ann_1', '<%= __('Ann_1') %>');
+__._('Ann_2', '<%= __('Ann_2') %>');
+__._('Announcement', '<%= __('Announcement') %>');
 </script>
 <div id="header">
     <span id="url">zPing</span>

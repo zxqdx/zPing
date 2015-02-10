@@ -23,23 +23,40 @@ module.exports = {
             },
             unique: true
         },
-        a: { // average ping in ms
+        w: { // website
+            type: 'string',
+            required: true
+        },
+        t: { // type
+            type: 'integer',
+            enum: [4, 6], // ipv4 or ipv6
+            required: true
+        },
+        avg: { // average ping in ms
             type: 'integer',
             defaultsTo: 0
         },
-        l: { // loss pings
+        loss: { // loss pings
             type: 'integer',
             defaultsTo: 0
         },
-        t: { // total pings
+        c: { // count (total) pings
             type: 'integer',
             defaultsTo: 0
         },
-        max: { // maximum ping
+        h: { // maximum ping
             type: 'integer',
             defaultsTo: 0
         },
-        min: { // minimum ping
+        l: { // minimum ping
+            type: 'integer',
+            defaultsTo: 0
+        },
+        lag: { // lag time length in secs
+            type: 'integer',
+            defaultsTo: 0
+        },
+        total: { // total time length in secs
             type: 'integer',
             defaultsTo: 0
         }

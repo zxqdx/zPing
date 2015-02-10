@@ -11,5 +11,9 @@
     "Count Losses": "Losses",
     "Rate Loss": "Loss",
     "Rate Lag": "Lag",
-    "Hourly Stat": "Hourly Statistics"
+    "Hourly Stat": "Hourly Statistics",
+    "Settings": "Settings",
+    "Announcement": "Announcement",
+    "Ann_1": "We plan to add more features to nav blocks.",
+    "Ann_2": "Anyone who is willing to contribute can fork this project on GitHub."
 }

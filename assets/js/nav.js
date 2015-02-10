@@ -1,18 +1,18 @@
-function Nav(container) {
-    /**
-     * Choose one random element in a list
-     * @param  {Array} list
-     * @return {any} Element the element in the list
-     */
-    var randChoose = function(list) {
-        return list[Math.floor(Math.random() * list.length)];
-    };
+/**
+ * Choose one random element in a list
+ * @param  {Array} list
+ * @return {any} Element the element in the list
+ */
+var randChoose = function(list) {
+    return list[Math.floor(Math.random() * list.length)];
+};
 
+function Nav(container) {
     var _this = this;
     var container = container;
     var navBlocks = {};
     // Constants
-    var COLORS = [1];
+    var COLORS = [1, 2, 3, 4, 5];
     var ANIMATE_BEFORE = 1200;
     var ANIMATE_IN_SPEED = 500;
     var ANIMATE_IN_DELAY = 150;
@@ -105,7 +105,10 @@ function Nav(container) {
     this.template = function(type, options) {
         // TODO
         var html = '';
-        if (type == 2) {
+        if (type == 1) {
+            html += '<div class="title">' + options.title + '</div>';
+            html += '<div class="subtitle">' + options.subtitle + '</div>';
+        } else if (type == 2) {
             html += '<div class="title solo">' + options.title + '</div>';
         } else if (type == 3) {
             html += '<img class="image" src="' + options.img + '"></img>'
@@ -287,11 +290,9 @@ function Nav(container) {
     this.add('desc', {
         color: 0,
         isSupp: 1,
-        html: function() {
-            return _this.template(2, {
-                title: '----'
-            });
-        },
+        html: _this.template(2, {
+            title: '----'
+        }),
         after: function(navId) {
             var intId = setInterval(function(navId) {
                 return function() {
@@ -306,7 +307,6 @@ function Nav(container) {
         }
     });
     this.add('acnya', {
-        color: 2,
         isSupp: 2,
         html: function() {
             return _this.template(3, {
@@ -317,14 +317,36 @@ function Nav(container) {
 }
 var nav = new Nav('#utility');
 $(document).ready(function() {
-    nav.add('n1');
-    nav.add('n2', {
+    nav.add('manage', {
+        color: 0,
+        isSupp: 0,
+        html: nav.template(2, {
+            title: __.t('Settings')
+        }),
         on: {
-            click: function(navId) {
-                alert(navId);
-            }
+            click: function() {}
         }
     });
+    nav.add('ann', (function() {
+        var anns = [
+            "Ann_1", "Ann_2"
+        ];
+        return {
+            isLong: true,
+            html: nav.template(1, {
+                title: __.t('Announcement'),
+                subtitle: ''
+            }),
+            on: {
+                click: function(navId) {
+                    alert(navId);
+                }
+            },
+            after: function(navId) {
+                $(navId + ' .subtitle').html(__.t(randChoose(anns)));
+            }
+        };
+    })());
     nav.add('n3', {
         isLong: true
     });

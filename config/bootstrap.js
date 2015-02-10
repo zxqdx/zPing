@@ -41,6 +41,10 @@ module.exports.bootstrap = function(cb) {
         c: 0,
         inc: 0
     };
+    var totalStat = false;
+    // TODO: fetch total stat, if DNE, create one.
+    
+    
     SocketManager._.on('getUrl', function() {
         return {
             url: WEBSITE,
@@ -78,6 +82,7 @@ module.exports.bootstrap = function(cb) {
                 return sails.log.error(err)
             };
 
+            // Interval statistics.
             intStat.total += p;
             if (intStat.l == 0 || (p < intStat.l && p > 0)) {
                 intStat.l = p;
@@ -87,6 +92,11 @@ module.exports.bootstrap = function(cb) {
             };
             if (p > intStat.h) {
                 intStat.h = p;
+            };
+
+            // Total statistics.
+            if (totalStat) {
+
             };
 
             if (created.id % RATE_INTERVAL == 0) {

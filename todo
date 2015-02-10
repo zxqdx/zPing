@@ -9,8 +9,7 @@ basic: curr avg   |   total(per x secs) | eachPing
 avg: hour.clalh (ping inc/dec rate, e.g. 2% ↑)
 
 navblocks
-    total: clalh lagLength(>500ms) timeLength
-
+    total: clalh lagLength timeLength (every 60 seconds, emit and save)
 
 ---------- overall
 ping range pie chart(by day)
