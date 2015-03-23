@@ -83,6 +83,8 @@ module.exports = function PingService(options) {
                 // Buffer will exceed
                 if (platformId == 0) { // Windows
                     spawn("taskkill", ["/pid", child.pid, '/f', '/t']);
+                } else if (platformId == 1) { // Linux
+                    spawn('kill', ["-9", "pid"])
                 };
                 childKilled = true;
                 forkPing();
