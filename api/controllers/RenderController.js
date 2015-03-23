@@ -13,7 +13,7 @@ module.exports = {
    * `RenderController.homepage()`
    */
   homepage: function (req, res) {
-    req.setLocale('en');
+    req.setLocale('zh');
     return res.view('homepage');
   }
 };

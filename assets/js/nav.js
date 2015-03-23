@@ -312,6 +312,11 @@ function Nav(container) {
             return _this.template(3, {
                 img: '/images/acfun/' + (Math.floor(Math.random() * 33) + 1) + '.png'
             });
+        },
+        on: {
+            click: function() {
+                window.open('http://www.acfun.tv');
+            }
         }
     })
 }
@@ -329,7 +334,7 @@ $(document).ready(function() {
     });
     nav.add('ann', (function() {
         var anns = [
-            "Ann_1", "Ann_2"
+            "Ann_1"
         ];
         return {
             isLong: true,
@@ -348,13 +353,26 @@ $(document).ready(function() {
         };
     })());
     nav.add('n3', {
-        isLong: true
+        isLong: true,
+        html: nav.template(1, {
+            title: "丧尸欢迎你",
+            subtitle: "点我进入AcFun匿名讨论版"
+        }),
+        on: {
+            click: function() {
+                window.open('http://h.acfun.tv');
+            }
+        }
     });
     nav.add('n4');
     nav.add('n5');
     nav.add('n6');
     nav.add('n7', {
-        isLong: true
+        isLong: true,
+        html: nav.template(1, {
+            title: "AC小秘密",
+            subtitle: "页脚的AC娘点击有惊喜<br>可以用来测试APM哦"
+        })
     });
     nav.add('n8');
     nav.add('n9');
